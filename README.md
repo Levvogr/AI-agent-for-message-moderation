@@ -147,3 +147,38 @@ uvicorn agent:app
 * unacceptable_part - если сообщение было определено как неприемлемое, то здесь его неприемлемая часть
 * message_status - если хоть один узел модерации признал сообщение неприемлемым, то примет значение unacceptable, если все узлы модерации признали сообщение приемлемым то примет значение acceptable
 * moderated_message - изначальное модерируемое сообщение
+### Пример
+Передаём в /agent_initialize
+```
+{
+  "create_base_moderation_node": true,
+  "create_insult_moderation_node": false,
+  "create_threat_moderation_node": false,
+  "create_toxic_moderation_node": false,
+  "create_offensive_language_moderation_node": false,
+  "create_provocative_moderation_node": false,
+  "create_obscence_moderation_node": false,
+  "create_hatespeech_moderation_node": false,
+  "create_antisocial_moderation_node": false,
+  "create_recommendation_node": true
+}
+```
+Затем передаём в /moderation
+```
+{
+  "message": "Don't expect me to participate in this stupid community. I'm just here to watch you fail."
+}
+```
+В резльтате получаем
+```
+{
+  "moderated_message": "Don't expect me to participate in this stupid community. I'm just here to watch you fail.",
+  "message_status": "unacceptable",
+  "base_moderation": {
+    "success": true,
+    "result": "unacceptable",
+    "unacceptable_part": "Don't expect me to participate in this stupid community. I'm just here to watch you fail."
+  },
+  "recommended_message": "I'm not interested in participating in this community, but I'm here to observe your efforts."
+}
+```
